@@ -1,63 +1,57 @@
 import mysqlConnection from '../services/mysqlConnection.mjs';
 
-const mysql = await mysqlConnection;
-
-//Difference entre execute et query? 
+const mysql = mysqlConnection.promise();
 
 class UserModel {
-  async readAll(pagination) {
-    const [count, countFields] = await mysql.execute('SELECT COUNT(id) FROM `users`');
-    const [rows, fields] = await mysql.execute('SELECT * FROM `users` LIMIT ?',[pagination*10]);
+  readAll(offset = 0, limit = 100) {
+    let response;
+    const query1 = 'SELECT COUNT(id) FROM `users`';
+    const query2 = 'SELECT * FROM `users` LIMIT ?,?';
 
-    const response = {
-      userCount : Object.values(count[0])[0],
-      rows : rows.length,
-      records : rows
-    }
-    return response;
-  }
+    const queryPromise1 = mysql
+      .execute(query1)
+      .then(result => Object.values(result[0][0])[0]);
 
-  async readOne(id) {
-    const [rows, fields] = await mysql.execute(
-      'SELECT * FROM `users` WHERE id = ?',
-      [id]
+    const queryPromise2 = mysql
+      .execute(query2, [offset, limit])
+      .then(result => result[0]);
+
+    return Promise.all([queryPromise1, queryPromise2]).then(
+      result =>
+        (response = {
+          recordsCount: result[0],
+          rows: result[1].length,
+          records: result[1],
+        })
     );
-    return rows;
   }
 
-  async createOne(user) {
-    const [rows, fields] = await mysql.execute(
-      'INSERT IGNORE INTO `users` VALUES (?, ?, ?, ?, ?, now())',
-      [
+  readOne(id) {
+    const query = 'SELECT * FROM `users` WHERE id = ?';
+    return mysql.execute(query, [id]).then(result => result[0]);
+  }
+
+  createOne(user) {
+    const query = 'INSERT IGNORE INTO `users` VALUES (?, ?, ?, ?, ?, now())';
+    return mysql
+      .execute(query, [
         user.id,
         user.firstname,
         user.lastname,
         user.email,
         user.password,
-      ]
-    );
-    console.log(rows);
-    return rows;
+      ])
+      .then(result => result[0]);
   }
 
-  async updateOne(setter, id) {
-    const [rows, fields] = await mysql.query(
-      'UPDATE `users` SET ? WHERE id = ?', [
-        setter,
-        id
-      ]
-    );
-    console.log(rows);
-    return rows;
+  updateOne(setter, id) {
+    const query = 'UPDATE `users` SET ? WHERE id = ?';
+    return mysql.query(query, [setter, id]).then(result => result[0]);
   }
 
-  async deleteOne(id) {
-    const [rows, fields] = await mysql.execute(
-      'DELETE FROM `users` WHERE id = ?',
-      [id]
-    );
-    console.log(rows);
-    return rows;
+  deleteOne(id) {
+    const query = 'DELETE FROM `users` WHERE id = ?';
+    return mysql.execute(query, [id]).then(result => result[0]);
   }
 }
 

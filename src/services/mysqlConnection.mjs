@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import mysql from 'mysql2';
 
 const mysqlConnection = mysql.createConnection({
   host: process.env.SQL_HOST || 'localhost',
