@@ -1,4 +1,5 @@
 const dataApiResponse = (records, page, count, limit) => {
+  page = parseInt(page);
   let last = Math.ceil(count/limit);
   return {
       records,

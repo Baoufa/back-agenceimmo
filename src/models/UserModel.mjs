@@ -3,31 +3,20 @@ import mysqlConnection from '../services/mysqlConnection.mjs';
 const mysql = mysqlConnection.promise();
 
 class UserModel {
+  countAll() {
+    const query = 'SELECT COUNT(*) as nb FROM `users`';
+    return mysql.execute(query).then(result => result[0][0].nb);
+  }
+
+  // Modifier pour ne faire que le read all
   readAll(offset = 0, limit = 100) {
-    let response;
-    const query1 = 'SELECT COUNT(id) FROM `users`';
-    const query2 = 'SELECT * FROM `users` LIMIT ?,?';
-
-    const queryPromise1 = mysql
-      .execute(query1)
-      .then(result => Object.values(result[0][0])[0]);
-
-    const queryPromise2 = mysql
-      .execute(query2, [offset, limit])
-      .then(result => result[0]);
-
-    return Promise.all([queryPromise1, queryPromise2]).then(
-      result =>
-        (response = {
-          recordsCount: result[0],
-          rows: result[1].length,
-          records: result[1],
-        })
-    );
+    const query = 'SELECT * FROM `users` LIMIT ?,?';
+    return mysql.execute(query, [offset, limit]).then(result => result[0]);
   }
 
   readOne(id) {
-    const query = 'SELECT * FROM `users` WHERE id = ?';
+    const query =
+      'SELECT `id`, `firstname`, `lastname`, `email`, `date`  FROM `users` WHERE id = ?';
     return mysql.execute(query, [id]).then(result => result[0]);
   }
 

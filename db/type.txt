@@ -1,0 +1,6 @@
+maison
+appartement
+terrain
+bureau
+parking
+cave

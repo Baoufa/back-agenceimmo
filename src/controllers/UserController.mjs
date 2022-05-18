@@ -1,26 +1,26 @@
 import UserModel from '../models/UserModel.mjs';
 import bcrypt from 'bcrypt';
+import dataApiResponse from '../services/dataApiResponse.mjs';
 
 class UserController {
   readAll(req, res) {
-    let page = 1;
-    if (req.query.p) {
-      page = req.query.p;
-    }
-    let limit = 100;
-    let offset = page * 100 - 100;
+    const page = req.query.page || 1;
+    const limit = 100;
+    const offset = page * limit - limit;
 
-    new UserModel()
-      .readAll(offset, limit)
-      .then(response => res.status(200).json(response))
-      .catch(e => console.log(e));
+    Promise.all([
+      new UserModel().countAll(),
+      new UserModel().readAll(offset, limit),
+    ]).then(result =>
+      res.status(200).json(dataApiResponse(result[1], page, result[0], limit))
+    );
   }
 
   readOne(req, res) {
     const id = req.params.id;
     new UserModel()
       .readOne(id)
-      .then(response => res.status(200).json(response))
+      .then(response => res.status(200).json(dataApiResponse(response)))
       .catch(e => console.log(e));
   }
 
@@ -34,7 +34,6 @@ class UserController {
       password: hash,
       date: null,
     };
-
     new UserModel()
       .createOne(userObject)
       .then(response => res.status(201).json(response))
@@ -42,18 +41,16 @@ class UserController {
   }
 
   updateOne(req, res) {
-    const keys = {
-      firstname: 'firstname',
-      lastname: 'lastname',
-      email: 'email',
-    };
-    const key = keys[Object.keys(req.body)[0]];
-    const userObject = {
-      [key]: req.body[key],
-    };
+    let entity = {};
+    let fields = ['firstname', 'lastname', 'email'];
+    fields.forEach(field => {
+      if (req.body[field]) {
+        entity[field] = req.body[field];
+      }
+    });
 
     new UserModel()
-      .updateOne(userObject, req.params.id)
+      .updateOne(entity, req.params.id)
       .then(response => res.status(201).json(response))
       .catch(e => console.log(e));
   }

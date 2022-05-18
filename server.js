@@ -5,8 +5,9 @@ import router from './routes/router.mjs';
 const app = express();
 import checkApiKey from './src/middleware/checkApiKey.mjs';
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+//TODO 
+//app.use(express.urlencoded({ extended: true }));
+
 
 // Cross origin policy
 app.use(cors());
