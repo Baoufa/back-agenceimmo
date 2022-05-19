@@ -1,4 +1,6 @@
 import RealtyModel from '../models/RealtyModel.mjs';
+import RelationRealtyImageModel from '../models/RelationRealtyImageModel.mjs';
+import ImageModel from '../models/ImageModel.mjs';
 import dataApiResponse from '../services/dataApiResponse.mjs';
 
 class RealtyController {
@@ -17,10 +19,35 @@ class RealtyController {
 
   readOne(req, res) {
     const id = req.params.id;
-    new RealtyModel()
-      .readOne(id)
-      .then(response => res.status(200).json(dataApiResponse(response)))
-      .catch(e => console.log(e));
+    const promise1 = new RealtyModel().readOne(id).then(response => response);
+
+    const promise2 = new RelationRealtyImageModel()
+      .getAllImgId(id)
+      .then(imgIdArray => {
+        if (imgIdArray.length > 0) {
+          return new ImageModel().readSelected(imgIdArray);
+        } else {
+          return null;
+        }
+      })
+      .then(filename => {
+        if (!filename) {
+          return null;
+        }
+        return filename.map(
+          name =>
+            `http://${process.env.SQL_HOST}:${process.env.PORT_HTTP}/realty-images/${name}`
+        );
+      });
+
+    Promise.all([promise1, promise2]).then(result => {
+      result[0][0].images = result[1];
+      return res.status(200).send(dataApiResponse(result[0][0]));
+    });
+    // realtyModel
+    //   .readOne(id)
+    //   .then(response => res.status(200).json(dataApiResponse(response)))
+    //   .catch(e => console.log(e));
   }
 
   createOne(req, res) {
@@ -43,7 +70,17 @@ class RealtyController {
 
   updateOne(req, res) {
     let entity = {};
-    let fields = ['type', 'address_1', 'address_2', 'city', 'zipcode', 'surface', 'nb_rooms', 'price', 'description'];
+    let fields = [
+      'type',
+      'address_1',
+      'address_2',
+      'city',
+      'zipcode',
+      'surface',
+      'nb_rooms',
+      'price',
+      'description',
+    ];
     fields.forEach(field => {
       if (req.body[field]) {
         entity[field] = req.body[field];

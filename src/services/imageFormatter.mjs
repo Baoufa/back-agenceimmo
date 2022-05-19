@@ -9,7 +9,7 @@ const imageFormatter = (imageBuffer) => {
   .greyscale()
   .toBuffer()
   .then(formattedData => {
-    let result = {};
+    const result = {};
     result.data = formattedData;
     result.name = `${uuidv4()}.png`;
     return result;
