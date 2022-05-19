@@ -15,6 +15,7 @@ const imageFormatter = (imageBuffer) => {
     return result;
   });
 
+  // Example de format de l'objet reçu de postman
   // const bob = {
   //   name: '350-536x354.jpeg',
   //   data: 'rr',

@@ -18,7 +18,6 @@ class ImageController {
       })
       .then(imageName => new ImageModel().addOne(imageName))
       .then(result => {
-        // console.log(parseInt(req.body.destination), parseInt(result.insertId));
         new RelationRealtyImageModel().addOne(
           parseInt(req.body.destination),
           parseInt(result.insertId)
