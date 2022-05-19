@@ -1,7 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-/db
-
 # correction dependencies
 /exo_1_v1.3
 
@@ -13,9 +11,9 @@
 # testing
 /coverage
 
-
 # production
 /public/realty-images
+/db
 
 # production
 /build
