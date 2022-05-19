@@ -2,47 +2,42 @@ import mysqlConnection from '../services/mysqlConnection.mjs';
 
 const mysql = mysqlConnection.promise();
 
-class UserModel {
+class RealtyModel {
   countAll() {
-    const query = 'SELECT COUNT(*) as nb FROM `users`';
+    const query = 'SELECT COUNT(*) as nb FROM `realties`';
     return mysql.execute(query).then(result => result[0][0].nb);
   }
 
   // Modifier pour ne faire que le read all
   readAll(offset = 0, limit = 100) {
-    const query = 'SELECT * FROM `users` LIMIT ?,?';
+    const query = 'SELECT * FROM `realties` LIMIT ?,?';
     return mysql.execute(query, [offset, limit]).then(result => result[0]);
   }
 
   readOne(id) {
     const query =
-      'SELECT `id`, `firstname`, `lastname`, `email`, `date`  FROM `users` WHERE id = ?';
+      'SELECT *  FROM `realties` WHERE id = ?';
     return mysql.execute(query, [id]).then(result => result[0]);
   }
 
-  createOne(user) {
-    const query = 'INSERT IGNORE INTO `users` VALUES (?, ?, ?, ?, ?, now())';
-
+  createOne(entity) {
+    const query = 'INSERT INTO `realties` (`type`, `address_1`, `address_2`, `city`, `zipcode`, `surface`, `nb_rooms`, `price`, `description`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
     return mysql
-      .execute(query, [
-        user.id,
-        user.firstname,
-        user.lastname,
-        user.email,
-        user.password,
-      ])
+      .execute(query, 
+        Object.values(entity)
+      )
       .then(result => result[0]);
   }
 
   updateOne(setter, id) {
-    const query = 'UPDATE `users` SET ? WHERE id = ?';
+    const query = 'UPDATE `realties` SET ? WHERE id = ?';
     return mysql.query(query, [setter, id]).then(result => result[0]);
   }
 
   deleteOne(id) {
-    const query = 'DELETE FROM `users` WHERE id = ?';
+    const query = 'DELETE FROM `realties` WHERE id = ?';
     return mysql.execute(query, [id]).then(result => result[0]);
   }
 }
 
-export default UserModel;
+export default RealtyModel;

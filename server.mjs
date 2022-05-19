@@ -2,15 +2,25 @@ import 'dotenv/config'; // see https://github.com/motdotla/dotenv#how-do-i-use-d
 import express from 'express';
 import cors from 'cors';
 import router from './routes/router.mjs';
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
 import checkApiKey from './src/middleware/checkApiKey.mjs';
 
-//TODO 
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 
 // Cross origin policy
 app.use(cors());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/api', checkApiKey, router);
 
@@ -37,3 +47,5 @@ app.listen(process.env.PORT_HTTP, () => {
     `Le serveur a demarré sur le port http://localhost:${process.env.PORT_HTTP}`
   );
 });
+
+export default __dirname;
