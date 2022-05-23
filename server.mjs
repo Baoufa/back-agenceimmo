@@ -4,32 +4,6 @@ import cors from 'cors';
 import router from './routes/router.mjs';
 import path from 'path';
 
-import fs from 'fs';
-import jwt from 'jsonwebtoken';
-
-let pem = fs.readFileSync('./db/pem');
-
-let pemRoo = [
-  "-----BEGIN PUBLIC KEY-----",
-  "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu3ozQ5ESqSyMwoJGyhfV",
-  "b0p51nrbYgIojq1KAcZ19fd81nf27Mpay0ORG61oTsFqOBnpR8Mdhs6PmN005u0G",
-  "8nn9B9HEUtVHW9IX3ev1Y/zijbn0ZcksE7N//MOy6IQ0Lkm6jqxGnsEClLnPjMgJ",
-  "PV8KI5GdJbVcs2Ja/TQ4ozW0X2p/DSkNseikIgXpnEusOB5YhvYHK5zlP2K01v+v",
-  "pNvqC35zeG85Ga4cZnDhB6qSEAAbBlaG/2aa3hcXKSMmZsmV4EF+bJkbHNIf9mhD",
-  "f3VOj06EIRVxPbQ7H+pPdcLpqg4iV87GwNNI6ghzAwIhYa+CXPzqn4U2ReHolwV6",
-  "GQIDAQAB",
-  "-----END PUBLIC KEY-----"
-]
-
-let test = jwt.sign({
-  "username": "jack"
-}, pem, 
-  {
-  algorithm: "HS256"
-}
-)
-
-console.log(test);
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
