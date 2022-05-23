@@ -35,7 +35,7 @@ class RealtyController {
         }
         return filename.map(
           name =>
-            `http://${process.env.SQL_HOST}:${process.env.PORT_HTTP}/realty-images/${name}`
+            `http://${process.env.SQL_HOST}:${process.env.PORT}/realty-images/${name}`
         );
       });
 

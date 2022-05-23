@@ -69,9 +69,9 @@ app.use('/', (req, res, next) => {
   res.end();
 });
 
-app.listen(process.env.PORT_HTTP, () => {
+app.listen(process.env.PORT, () => {
   console.log(
-    `Le serveur a demarré sur le port http://localhost:${process.env.PORT_HTTP}`
+    `Le serveur a demarré sur le port http://localhost:${process.env.PORT}`
   );
 });
 
