@@ -15,14 +15,12 @@ class UserModel {
   }
 
   readOne(id) {
-  
     const query =
       'SELECT `id`, `firstname`, `lastname`, `email`, `date`  FROM `users` WHERE id = ?';
     return mysql.execute(query, [id]).then(result => result[0]);
   }
 
   createOne(user) {
-    mysql.connect();
     const query = 'INSERT IGNORE INTO `users` VALUES (?, ?, ?, ?, ?, now())';
 
     return mysql
