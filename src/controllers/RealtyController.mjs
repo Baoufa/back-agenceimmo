@@ -20,7 +20,6 @@ class RealtyController {
   readOne(req, res) {
     const id = req.params.id;
     const promise1 = new RealtyModel().readOne(id).then(response => response);
-
     const promise2 = new RelationRealtyImageModel()
       .getAllImgId(id)
       .then(imgIdArray => {
@@ -44,10 +43,6 @@ class RealtyController {
       result[0][0].images = result[1];
       return res.status(200).send(dataApiResponse(result[0][0]));
     });
-    // realtyModel
-    //   .readOne(id)
-    //   .then(response => res.status(200).json(dataApiResponse(response)))
-    //   .catch(e => console.log(e));
   }
 
   createOne(req, res) {
