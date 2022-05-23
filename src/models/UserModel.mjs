@@ -3,7 +3,7 @@ import mysqlConnection from '../services/mysqlConnection.mjs';
 const mysql = mysqlConnection.promise();
 
 class UserModel {
-  countAll() {
+   countAll() {
     const query = 'SELECT COUNT(*) as nb FROM `users`';
     return mysql.execute(query).then(result => result[0][0].nb);
   }
@@ -15,12 +15,14 @@ class UserModel {
   }
 
   readOne(id) {
+  
     const query =
       'SELECT `id`, `firstname`, `lastname`, `email`, `date`  FROM `users` WHERE id = ?';
     return mysql.execute(query, [id]).then(result => result[0]);
   }
 
   createOne(user) {
+    mysql.connect();
     const query = 'INSERT IGNORE INTO `users` VALUES (?, ?, ?, ?, ?, now())';
 
     return mysql

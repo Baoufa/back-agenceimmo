@@ -1,6 +1,6 @@
 import mysql from 'mysql2';
 
-const mysqlConnection = mysql.createConnection({
+const mysqlConnection = mysql.createPool({
   host: process.env.SQL_HOST || 'localhost',
   user: process.env.SQL_USER || 'root',
   password: process.env.SQL_PASSWORD || '',
