@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Last Realty</title>
+  <script src="/socket.io/socket.io.js" defer></script>
+  <script src="./index.js" defer></script>
+  <link rel="stylesheet" href="./index.css">
+  
+</head>
+<body>
+  <h1>Hello World</h1>
+
+  <template>
+    <ul>
+      <li>
+        <h2>Type:</h2>
+        <div id="type"></div>
+      </li>
+      <li>
+        <h2>Address_1:</h2>
+        <div></div>
+      </li id="address-1">
+      <li >
+        <h2>Address_2:</h2>
+        <div></div>
+      </li id="address-2">
+      <li>
+        <h2>City</h2>
+        <div id="city"></div>
+      </li>
+      <li>
+        <h2>zipCode</h2>
+        <div id="zipcode"></div>
+      </li>
+      <li>
+        <h2>Surface</h2>
+        <div id="surface"></div>
+      </li>
+      <li>
+        <h2>nb_rooms</h2>
+        <div id="nb_rooms"></div>
+      </li>
+      <li>
+        <h2>Price</h2>
+        <div id="price"></div>
+      </li>
+      <li>
+        <h2>Description</h2>
+        <div id="description"></div>
+      </li>
+    </ul>
+  </template>
+
+  <button id="btn">Coucou le serveur</button>
+</body>
+</html>

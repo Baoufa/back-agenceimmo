@@ -4,9 +4,12 @@ import realtyTypeRouter from './router.realtyType.mjs';
 import realtyRouter from './router.realty.mjs';
 import imageRouter from './router.image.mjs';
 
+
 const router = express.Router();
 
 router.use(express.json());
+
+
 
 router.use('/user', userRouter);
 router.use('/realty/image', imageRouter);

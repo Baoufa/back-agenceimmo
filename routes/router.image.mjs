@@ -4,10 +4,9 @@ import ImageController from '../src/controllers/ImageController.mjs';
 
 const imageRouter = express.Router();
 
-imageRouter.use(fileUpload());
 
 imageRouter.get('/', new ImageController().readAll);
-imageRouter.post('/', new ImageController().addOne);
+imageRouter.post('/', fileUpload(), new ImageController().addOne);
 imageRouter.delete('/:id', new ImageController().deleteOne);
 
 imageRouter.route('/').all((req, res) => {

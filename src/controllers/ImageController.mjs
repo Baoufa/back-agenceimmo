@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import __dirname from '../../server.mjs';
+import {__dirname} from '../../server.mjs';
 import imageFormatter from '../services/imageFormatter.mjs';
 import ImageModel from '../models/ImageModel.mjs';
 import RelationRealtyImageModel from '../models/RelationRealtyImageModel.mjs';

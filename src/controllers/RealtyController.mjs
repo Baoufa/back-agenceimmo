@@ -2,6 +2,7 @@ import RealtyModel from '../models/RealtyModel.mjs';
 import RelationRealtyImageModel from '../models/RelationRealtyImageModel.mjs';
 import ImageModel from '../models/ImageModel.mjs';
 import dataApiResponse from '../services/dataApiResponse.mjs';
+import eventWebSocket from '../events/eventWebSocket.mjs';
 
 class RealtyController {
   readAll(req, res) {
@@ -30,12 +31,13 @@ class RealtyController {
         }
       })
       .then(filename => {
-        if (!filename) {
+        let host = req.get('host');
+         if (!filename) {
           return null;
         }
         return filename.map(
           name =>
-            `http://${process.env.SQL_HOST}:${process.env.PORT}/realty-images/${name}`
+            `http://${host}/realty-images/${name}`
         );
       });
 
@@ -59,7 +61,10 @@ class RealtyController {
     };
     new RealtyModel()
       .createOne(RealtyObject)
-      .then(response => res.status(201).json(response))
+      .then(response => {
+        eventWebSocket.emit('bdd-new-realty', RealtyObject);
+        res.status(201).json(response);
+      })
       .catch(e => console.log(e));
   }
 
@@ -84,7 +89,9 @@ class RealtyController {
 
     new RealtyModel()
       .updateOne(entity, req.params.id)
-      .then(response => res.status(201).json(response))
+      .then(response => {
+        res.status(201).json(response)
+      })
       .catch(e => console.log(e));
   }
 
