@@ -44,8 +44,8 @@ function onNewRealty(realty) {
 }
 
 function onLoadHandler() {
-  const host = 'http://' + window.location.hostname;
-  fetch(`${host}:3000/api/realty`, {
+  const host = 'http://' + window.location.host;
+  fetch(`${host}/api/realty`, {
     headers: {
       'x-api-key': 'F0ZSBG3-N1HM4XD-QSGHC5M-819XB29',
       Accept: 'application/json',
@@ -53,8 +53,8 @@ function onLoadHandler() {
     },
   })
     .then(response => response.json())
-    .then(response =>
-      fetch(`${host}:3000/api/realty/${response.nbRecords}`, {
+    .then(response => 
+      fetch(`${host}/api/realty/?page=${response.page.last}`, {
         headers: {
           'x-api-key': 'F0ZSBG3-N1HM4XD-QSGHC5M-819XB29',
           Accept: 'application/json',
@@ -63,9 +63,9 @@ function onLoadHandler() {
       })
     )
     .then(response => response.json())
-    .then(response => onNewRealty(response.records));
+    .then(response => onNewRealty(response.records.pop()))
 }
 
-socket.on('new-realty', onNewRealty);
+socket.on('new-realty', onLoadHandler);
 window.addEventListener('load', onLoadHandler);
 btn.addEventListener('click', clickHandler);

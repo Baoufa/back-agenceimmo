@@ -23,9 +23,11 @@ ul{
 h2{font-size: 1rem;}
 
 li{
-  background-color: aqua;
+  background-color: darkblue;
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
+  border-radius: 9px;
 }

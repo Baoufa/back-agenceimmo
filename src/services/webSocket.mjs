@@ -11,13 +11,13 @@ const ioconnection = () => {
     socket.on('message', message => {
       console.log(message);
     });
-    eventWebSocket.on('bdd-new-realty', (realty) => ioNewRealty(socket, realty) );
+    eventWebSocket.on('bdd-new-realty', () => ioNewRealty(socket) );
   });
 };
 
-const ioNewRealty = (socket, realty) => {
+const ioNewRealty = (socket) => {
   console.log('hello serveur');
-  socket.emit('new-realty', realty);
+  socket.emit('new-realty', '');
 };
 
 export { ioconnection, ioNewRealty };

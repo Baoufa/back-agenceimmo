@@ -32,13 +32,10 @@ class RealtyController {
       })
       .then(filename => {
         let host = req.get('host');
-         if (!filename) {
+        if (!filename) {
           return null;
         }
-        return filename.map(
-          name =>
-            `http://${host}/realty-images/${name}`
-        );
+        return filename.map(name => `http://${host}/realty-images/${name}`);
       });
 
     Promise.all([promise1, promise2]).then(result => {
@@ -62,7 +59,7 @@ class RealtyController {
     new RealtyModel()
       .createOne(RealtyObject)
       .then(response => {
-        eventWebSocket.emit('bdd-new-realty', RealtyObject);
+        eventWebSocket.emit('bdd-new-realty', '');
         res.status(201).json(response);
       })
       .catch(e => console.log(e));
@@ -90,7 +87,7 @@ class RealtyController {
     new RealtyModel()
       .updateOne(entity, req.params.id)
       .then(response => {
-        res.status(201).json(response)
+        res.status(201).json(response);
       })
       .catch(e => console.log(e));
   }
@@ -99,7 +96,10 @@ class RealtyController {
     const id = req.params.id;
     new RealtyModel()
       .deleteOne(id)
-      .then(response => res.status(200).json(response))
+      .then(response => {
+        eventWebSocket.emit('bdd-new-realty', '');
+        res.status(200).json(response);
+      })
       .catch(e => console.log(e));
   }
 }
